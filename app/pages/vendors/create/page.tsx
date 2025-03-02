@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/utils/supabase";
-import Link from "next/link";
 
 export default function CreateVendor() {
   const router = useRouter();
@@ -73,7 +72,7 @@ export default function CreateVendor() {
         throw new Error("Supabase client is not initialized");
       }
 
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("vendors")
         .insert([formData])
         .select();
@@ -91,7 +90,7 @@ export default function CreateVendor() {
   };
 
   return (
-    <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8 mt-20">
       <div className="max-w-3xl mx-auto">
         <div className="bg-white shadow-md rounded-lg overflow-hidden">
           <div className="px-6 py-4 bg-gray-50 border-b">

@@ -21,7 +21,7 @@ interface Vendor {
 }
 
 export default function AfterLoginLanding() {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const [vendors, setVendors] = useState<Vendor[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -150,7 +150,7 @@ export default function AfterLoginLanding() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
+    <div className="flex flex-col min-h-screen bg-gray-100 mt-20">
       <main className="flex-grow p-6">
         <div className="max-w-6xl mx-auto">
           <div className="flex justify-between items-center mb-8">

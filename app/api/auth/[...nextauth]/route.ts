@@ -3,7 +3,8 @@ import GoogleProvider from "next-auth/providers/google";
 import { NextAuthOptions } from "next-auth";
 import { supabaseAdmin } from "../../../../utils/supabase";
 
-export const authOptions: NextAuthOptions = {
+// Define the auth options but don't export them directly from the file
+const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -12,27 +13,32 @@ export const authOptions: NextAuthOptions = {
   ],
   secret: process.env.NEXTAUTH_SECRET, // Generate with: `openssl rand -base64 32`
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ user }) {
       if (!user.email) {
         return false;
       }
 
-      // Check if the user exists in your Supabase database
-      const { data, error } = await supabaseAdmin
-        .from("authorized_users")
-        .select("*")
-        .eq("email", user.email)
-        .single();
+      try {
+        // Check if the user exists in your Supabase database
+        const { data, error } = await supabaseAdmin!
+          .from("authorized_users")
+          .select("*")
+          .eq("email", user.email)
+          .single();
 
-      if (error || !data) {
-        console.log(`User ${user.email} not authorized`);
-        return false;
+        if (error || !data) {
+          console.log(`User ${user.email} not authorized`);
+          return false;
+        }
+
+        console.log(`User ${user.email} authorized`);
+        return true;
+      } catch (error) {
+        console.error("Error checking user authorization:", error);
+        return false; // Fail closed for security
       }
-
-      console.log(`User ${user.email} authorized`);
-      return true;
     },
-    async session({ session, token }) {
+    async session({ session }) {
       return session;
     },
     async jwt({ token, user }) {
@@ -48,5 +54,8 @@ export const authOptions: NextAuthOptions = {
   },
 };
 
+// Create the handler using the auth options
 const handler = NextAuth(authOptions);
+
+// Export the handler functions directly
 export { handler as GET, handler as POST };
