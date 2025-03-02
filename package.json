@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@auth/core": "^0.38.0",
     "@supabase/supabase-js": "^2.49.1",
     "next": "15.2.0",
     "next-auth": "^4.24.11",
